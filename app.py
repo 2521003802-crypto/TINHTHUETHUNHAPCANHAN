@@ -1,44 +1,69 @@
 import streamlit as st
-st.image("photo.png")
-#Tiêu đề app
-st.title("APP TÍNH TIỀN GỬI TIẾT KIỆM_ĐỀ TÀI 4_SV NGUYỄN NHẬT HUY")
-
-C = st.number_input(
-    "Nhập số tiền khách hàng gửi tiết kiệm (triệu đồng)",
+st.image("z7946906147278_ee061fe7efc447c6c9f3a4eaebb0656a.jpg")
+st.title("💰 App tính Thuế Thu Nhập Cá Nhân đề tài 4 Nguyễn NHẬT HUY")
+thu_nhap = st.number_input(
+    "Nhập thu nhập trước thuế (VNĐ)",
     min_value=0.0,
-    value=100.0
+    value=20000000.0
 )
 
-i = st.number_input(
-    "Nhập lãi suất gửi tiết kiệm theo năm (%)",
-    min_value=0.0,
-    value=6.0
+nguoi_phu_thuoc = st.number_input(
+    "Nhập số người phụ thuộc",
+    min_value=0,
+    value=0
 )
 
-n = st.number_input(
-    "Nhập số tháng khách hàng gửi tiết kiệm",
-    min_value=1,
-    value=12
-)
+if st.button("Tính thuế"):
 
-# Đổi lãi suất từ % sang số thập phân
-i = i / 100
+    # Các khoản giảm trừ
+    giam_tru_ban_than = 15500000
+    giam_tru_phu_thuoc = nguoi_phu_thuoc * 6200000
+    bao_hiem = thu_nhap * 0.105
 
-# Nút tính toán
-if st.button("Tính toán"):
-    
-    # Lãi đơn
-    An = C * (1 + (i / 12) * n)
+    tong_giam_tru = (
+        giam_tru_ban_than
+        + giam_tru_phu_thuoc
+        + bao_hiem
+    )
 
-    # Lãi kép
-    Bn = C * (1 + i / 12) ** n
+    # Thu nhập tính thuế
+    thu_nhap_tinh_thue = max(
+        0,
+        thu_nhap - tong_giam_tru
+    )
+
+    # Tính thuế lũy tiến từng phần
+    tax = 0
+
+    if thu_nhap_tinh_thue <= 5000000:
+        tax = thu_nhap_tinh_thue * 0.05
+
+    elif thu_nhap_tinh_thue <= 10000000:
+        tax = 250000 + (thu_nhap_tinh_thue - 5000000) * 0.10
+
+    elif thu_nhap_tinh_thue <= 18000000:
+        tax = 750000 + (thu_nhap_tinh_thue - 10000000) * 0.15
+
+    elif thu_nhap_tinh_thue <= 32000000:
+        tax = 1950000 + (thu_nhap_tinh_thue - 18000000) * 0.20
+
+    elif thu_nhap_tinh_thue <= 52000000:
+        tax = 4750000 + (thu_nhap_tinh_thue - 32000000) * 0.25
+
+    elif thu_nhap_tinh_thue <= 80000000:
+        tax = 9750000 + (thu_nhap_tinh_thue - 52000000) * 0.30
+
+    else:
+        tax = 18150000 + (thu_nhap_tinh_thue - 80000000) * 0.35
+
+    thu_nhap_sau_thue = thu_nhap - bao_hiem - tax
 
     st.success("Kết quả tính toán")
 
-    st.write(
-        f"📌 Số tiền khách hàng nhận được theo lãi đơn: **{An:,.2f} triệu đồng**"
-    )
-
-    st.write(
-        f"📌 Số tiền khách hàng nhận được theo lãi kép: **{Bn:,.2f} triệu đồng**"
-    )
+    st.write(f"📌 Thu nhập trước thuế: **{thu_nhap:,.0f} VNĐ**")
+    st.write(f"📌 Giảm trừ bản thân: **{giam_tru_ban_than:,.0f} VNĐ**")
+    st.write(f"📌 Giảm trừ người phụ thuộc: **{giam_tru_phu_thuoc:,.0f} VNĐ**")
+    st.write(f"📌 Bảo hiểm bắt buộc (10.5%): **{bao_hiem:,.0f} VNĐ**")
+    st.write(f"📌 Thu nhập tính thuế: **{thu_nhap_tinh_thue:,.0f} VNĐ**")
+    st.write(f"📌 Thuế TNCN phải nộp: **{tax:,.0f} VNĐ**")
+    st.write(f"📌 Thu nhập sau thuế: **{thu_nhap_sau_thue:,.0f} VNĐ**")
