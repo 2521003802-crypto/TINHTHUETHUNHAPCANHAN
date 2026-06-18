@@ -1,5 +1,6 @@
 import streamlit as st
-st.image("Gemini_Generated_Image_2va9ol2va9ol2va9.png")
+st.image(" Gemini_Generated_Image_2va9ol2va9ol2va9.png ")
+
 st.title("💰 App tính Thuế Thu Nhập Cá Nhân đề tài 4 Nguyễn NHẬT HUY")
 thu_nhap = st.number_input(
     "Nhập thu nhập trước thuế (VNĐ)",
